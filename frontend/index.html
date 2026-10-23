@@ -1,0 +1,2617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ParkSpot — Smart Society Visitor Parking Management System</title>
+  <meta name="description" content="Smarter Parking. Safer Communities. Intelligent society visitor parking slot tracker and security gate management platform." />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-body: #070d18;
+      --bg-surface: #0b1325;
+      --bg-card: #0f1a30;
+      --bg-card-hover: #14223d;
+      --bg-input: #0a1120;
+      --bg-glass: rgba(15, 26, 48, 0.75);
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-medium: rgba(255, 255, 255, 0.14);
+      --border-focus: #3b82f6;
+
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-glow: rgba(59, 130, 246, 0.25);
+
+      --success: #10b981;
+      --success-light: #34d399;
+      --success-glow: rgba(16, 185, 129, 0.25);
+      --success-bg: rgba(16, 185, 129, 0.12);
+
+      --danger: #ef4444;
+      --danger-light: #f87171;
+      --danger-glow: rgba(239, 68, 68, 0.25);
+      --danger-bg: rgba(239, 68, 68, 0.12);
+
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.12);
+
+      --text-white: #ffffff;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --sidebar-width: 270px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.35);
+      --shadow-lg: 0 16px 40px rgba(0,0,0,0.5);
+      --shadow-glow: 0 0 35px rgba(59, 130, 246, 0.2);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 40%, rgba(16, 185, 129, 0.07) 0%, transparent 40%),
+        radial-gradient(circle at 50% 90%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: var(--bg-body); }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    /* Utilities */
+    .container {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .badge-primary { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+    .badge-success { background: var(--success-bg); color: var(--success-light); border: 1px solid rgba(16,185,129,0.3); }
+    .badge-danger { background: var(--danger-bg); color: var(--danger-light); border: 1px solid rgba(239,68,68,0.3); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.75rem 1.4rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+    }
+    .btn-success {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+    .btn-success:hover {
+      background: linear-gradient(135deg, #10b981, #34d399);
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--border-medium);
+      color: var(--text-white);
+      backdrop-filter: blur(8px);
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    .btn-sm {
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
+    }
+
+    /* ─── TOP NAVBAR (LANDING) ─── */
+    nav.landing-navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(7, 13, 24, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: all 0.3s ease;
+    }
+    .navbar-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 76px;
+    }
+    .brand-logo-link {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #fff;
+    }
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #2563eb, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    }
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .brand-name span.dot {
+      color: #10b981;
+    }
+    .brand-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover {
+      color: var(--text-white);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .live-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 0.35rem 0.8rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      color: var(--success-light);
+      font-weight: 600;
+    }
+    .status-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseGlow 2s infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* ─── HERO SECTION ─── */
+    section.hero-section {
+      padding: 150px 0 90px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.9rem;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #60a5fa;
+      margin-bottom: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      color: var(--text-white);
+      margin-bottom: 1.25rem;
+    }
+    .hero-title span.gradient-text {
+      background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-description {
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 2rem;
+      max-width: 580px;
+    }
+    .hero-buttons {
+      display: flex;
+      align-items: center;
+      gap: 1.15rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-visual-card {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6), var(--shadow-glow);
+      border: 1px solid var(--border-medium);
+      background: var(--bg-card);
+    }
+    .hero-banner-img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .hero-visual-card:hover .hero-banner-img {
+      transform: scale(1.03);
+    }
+    .hero-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 13, 24, 0.92) 0%, rgba(7, 13, 24, 0.2) 60%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.75rem;
+    }
+    .hero-overlay-kpi {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15, 26, 48, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1.25rem;
+    }
+    .kpi-pill-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .kpi-pill-item span.label {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .kpi-pill-item span.val {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-white);
+      font-family: var(--font-mono);
+    }
+
+    /* ─── LIVE PARKING OVERVIEW ─── */
+    section.live-overview-section {
+      padding: 60px 0 90px;
+      position: relative;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+    .section-eyebrow {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #60a5fa;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .section-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-white);
+      margin-bottom: 0.75rem;
+    }
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .live-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .kpi-stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+    .kpi-stat-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-medium);
+      background: var(--bg-card-hover);
+      box-shadow: var(--shadow-md);
+    }
+    .kpi-stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+    }
+    .kpi-stat-card.total::after { background: #3b82f6; }
+    .kpi-stat-card.available::after { background: #10b981; }
+    .kpi-stat-card.occupied::after { background: #ef4444; }
+    .kpi-stat-card.visitors::after { background: #f59e0b; }
+    .kpi-stat-card.flats::after { background: #8b5cf6; }
+
+    .kpi-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    .kpi-card-header span.title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+    .kpi-stat-card h3.stat-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--text-white);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .kpi-stat-card p.stat-sub {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .telemetry-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15, 26, 48, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1.25rem;
+      font-size: 0.85rem;
+    }
+    .telemetry-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text-muted);
+    }
+    .telemetry-left code {
+      font-family: var(--font-mono);
+      color: #60a5fa;
+      background: rgba(59, 130, 246, 0.1);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    /* ─── FEATURES SECTION ─── */
+    section.features-section {
+      padding: 90px 0;
+      background: rgba(11, 19, 37, 0.4);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3), 0 0 20px rgba(59, 130, 246, 0.15);
+      background: var(--bg-card-hover);
+    }
+    .feature-icon-wrapper {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    .feature-card:nth-child(1) .feature-icon-wrapper { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .feature-card:nth-child(2) .feature-icon-wrapper { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .feature-card:nth-child(3) .feature-icon-wrapper { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .feature-card:nth-child(4) .feature-icon-wrapper { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+    .feature-card:nth-child(5) .feature-icon-wrapper { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+    .feature-card:nth-child(6) .feature-icon-wrapper { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; }
+
+    .feature-card h4.feature-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 0.65rem;
+    }
+    .feature-card p.feature-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ─── HOW IT WORKS SECTION ─── */
+    section.how-it-works-section {
+      padding: 90px 0;
+      position: relative;
+    }
+    .workflow-timeline {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.25rem;
+      position: relative;
+      margin-top: 2rem;
+    }
+    .workflow-step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 1.25rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+    .workflow-step-card:hover {
+      border-color: var(--border-medium);
+      transform: translateY(-4px);
+    }
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #10b981);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+    }
+    .workflow-step-card h5.step-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 0.5rem;
+    }
+    .workflow-step-card p.step-text {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ─── PARKING AVAILABILITY PREVIEW ─── */
+    section.preview-grid-section {
+      padding: 90px 0;
+      background: rgba(11, 19, 37, 0.4);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .mini-slots-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .mini-bay-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .mini-bay-card.available {
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.04);
+    }
+    .mini-bay-card.occupied {
+      border-color: rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.04);
+    }
+    .mini-bay-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mini-bay-num {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-white);
+    }
+    .mini-bay-plate {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #f87171;
+    }
+    .mini-bay-sub {
+      font-size: 0.725rem;
+      color: var(--text-dim);
+    }
+
+    /* ─── BENEFITS SECTION ─── */
+    section.benefits-section {
+      padding: 90px 0;
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+    }
+    .benefit-item-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+    .benefit-check-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .benefit-content h5 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 0.35rem;
+    }
+    .benefit-content p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ─── CTA BANNER ─── */
+    section.cta-banner-section {
+      padding: 80px 0;
+    }
+    .cta-banner-card {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(16, 185, 129, 0.2) 100%), var(--bg-card);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: var(--radius-xl);
+      padding: 4rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-banner-card h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .cta-banner-card p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto 2.25rem;
+    }
+
+    /* ─── FOOTER ─── */
+    footer.landing-footer {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-subtle);
+      padding: 60px 0 35px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 3rem;
+      margin-bottom: 3.5rem;
+    }
+    .footer-brand p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.85rem;
+      line-height: 1.6;
+      max-width: 320px;
+    }
+    .footer-col h5 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-white);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.25rem;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s ease;
+    }
+    .footer-links a:hover {
+      color: var(--text-white);
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ─── DASHBOARD VIEW STYLING (MANAGEMENT CONSOLE) ───
+       ═══════════════════════════════════════════════════════════════ */
+    #dashboard-view {
+      display: none;
+      width: 100vw;
+      min-height: 100vh;
+      background: var(--bg-body);
+    }
+    #dashboard-view.active {
+      display: flex;
+    }
+
+    aside.sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+    }
+    .brand-section {
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .nav-menu {
+      padding: 1.25rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex: 1;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .nav-item:hover {
+      background: rgba(255,255,255,0.04);
+      color: var(--text-white);
+    }
+    .nav-item.active {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    .nav-section-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      padding: 0.75rem 1rem 0.25rem;
+      font-weight: 700;
+    }
+
+    .main-wrapper {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    header.dashboard-header {
+      height: 72px;
+      background: rgba(7, 13, 24, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .header-title h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .header-title p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .dashboard-content {
+      padding: 2rem;
+      flex: 1;
+    }
+    .view-panel {
+      display: none;
+    }
+    .view-panel.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slots Grid */
+    .slots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+    .slot-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    .slot-card.available {
+      border-color: rgba(16, 185, 129, 0.35);
+      background: rgba(16, 185, 129, 0.05);
+    }
+    .slot-card.occupied {
+      border-color: rgba(239, 68, 68, 0.35);
+      background: rgba(239, 68, 68, 0.05);
+    }
+    .slot-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .slot-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+    }
+    .slot-num-badge {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-white);
+    }
+    .slot-plate-box {
+      background: #000;
+      border: 2px solid #334155;
+      border-radius: 6px;
+      padding: 0.35rem 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0.5rem 0;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .ind-badge {
+      background: #1e3a8a;
+      color: #fff;
+      font-size: 0.55rem;
+      padding: 0.1rem 0.25rem;
+      border-radius: 2px;
+      font-weight: 800;
+    }
+
+    /* Table */
+    .data-table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-top: 1.5rem;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    table.data-table th {
+      background: rgba(0,0,0,0.25);
+      padding: 1rem 1.25rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    table.data-table td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+    }
+    table.data-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+      overflow: hidden;
+      animation: modalSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalSlide {
+      from { transform: translateY(20px) scale(0.97); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .modal-header {
+      padding: 1.5rem 1.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-header h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .modal-body {
+      padding: 1.75rem;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.45rem;
+    }
+    .form-control {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: border-color 0.2s ease;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+    .modal-footer {
+      padding: 1.25rem 1.75rem;
+      background: rgba(0,0,0,0.2);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    /* Toast Container */
+    #toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .toast-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      min-width: 320px;
+      color: #fff;
+      animation: toastIn 0.25s ease;
+    }
+    @keyframes toastIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .toast-item.success { border-color: var(--success); }
+    .toast-item.error { border-color: var(--danger); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .live-kpi-grid { grid-template-columns: repeat(3, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .workflow-timeline { grid-template-columns: 1fr; }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .mini-slots-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-title { font-size: 2.5rem; }
+      .live-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: 1fr; }
+      .mini-slots-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr; }
+      aside.sidebar { display: none; }
+      .main-wrapper { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       1. LANDING WEBSITE VIEW (DEFAULT USER-FACING HOME)
+       ═══════════════════════════════════════════════════════════════ -->
+  <div id="landing-page-view">
+    
+    <!-- TOP NAVIGATION -->
+    <nav class="landing-navbar">
+      <div class="container navbar-wrapper">
+        <a href="#home" class="brand-logo-link">
+          <div class="brand-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+          </div>
+          <div>
+            <div class="brand-name">ParkSpot<span class="dot">.</span></div>
+            <span class="brand-sub">Smart Society Parking</span>
+          </div>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#live-overview">Live Overview</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#parking-preview">Parking Grid</a></li>
+          <li><a href="#benefits">Benefits</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <div class="live-status-pill" id="landing-backend-pill">
+            <div class="status-pulse"></div>
+            <span>Connected API</span>
+          </div>
+          <button class="btn btn-primary" onclick="switchView('dashboard')">
+            <span>Open Dashboard</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="home">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-content">
+            <div class="hero-eyebrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>Intelligent Society Parking Solution</span>
+            </div>
+            <h1 class="hero-title">
+              Smarter Parking.<br />
+              <span class="gradient-text">Safer Communities.</span>
+            </h1>
+            <p class="hero-description">
+              Manage society parking slots, track visitor vehicles, and simplify entry and exit operations with one intelligent parking management platform.
+            </p>
+            <div class="hero-buttons">
+              <button class="btn btn-primary" onclick="switchView('dashboard')" style="padding: 0.9rem 1.8rem; font-size: 1rem;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span>Explore Dashboard</span>
+              </button>
+              <a href="#features" class="btn btn-outline" style="padding: 0.9rem 1.8rem; font-size: 1rem;">
+                <span>Discover Features</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="hero-visual-card">
+            <img src="assets/parkspot_hero_banner.jpg" alt="ParkSpot Modern Residential Parking Facility" class="hero-banner-img" />
+            <div class="hero-banner-overlay">
+              <div class="hero-overlay-kpi">
+                <div class="kpi-pill-item">
+                  <span class="label">Society Gate Status</span>
+                  <span class="val" style="color: #34d399;">● Online</span>
+                </div>
+                <div class="kpi-pill-item">
+                  <span class="label">Live Available Slots</span>
+                  <span class="val" id="hero-available-count">--</span>
+                </div>
+                <div class="kpi-pill-item">
+                  <span class="label">System Speed</span>
+                  <span class="val" style="color: #60a5fa;">&lt; 100ms</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE PARKING OVERVIEW -->
+    <section class="live-overview-section" id="live-overview">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Real-Time Backend Telemetry</span>
+          <h2 class="section-title">Live Society Parking Overview</h2>
+          <p class="section-subtitle">Real-time statistics fetched directly from your Spring Boot MySQL backend.</p>
+        </div>
+
+        <div class="live-kpi-grid">
+          <div class="kpi-stat-card total">
+            <div class="kpi-card-header">
+              <span class="title">Total Slots</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            </div>
+            <h3 class="stat-value" id="landing-stat-total">--</h3>
+            <p class="stat-sub">Configured society parking bays</p>
+          </div>
+
+          <div class="kpi-stat-card available">
+            <div class="kpi-card-header">
+              <span class="title">Available Slots</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+            </div>
+            <h3 class="stat-value" id="landing-stat-available" style="color: #34d399;">--</h3>
+            <p class="stat-sub">Ready for incoming visitor cars</p>
+          </div>
+
+          <div class="kpi-stat-card occupied">
+            <div class="kpi-card-header">
+              <span class="title">Occupied Slots</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+            </div>
+            <h3 class="stat-value" id="landing-stat-occupied" style="color: #f87171;">--</h3>
+            <p class="stat-sub">Currently parked vehicles</p>
+          </div>
+
+          <div class="kpi-stat-card visitors">
+            <div class="kpi-card-header">
+              <span class="title">Visitors Today</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3 class="stat-value" id="landing-stat-today" style="color: #fbbf24;">--</h3>
+            <p class="stat-sub">Vehicles logged since midnight</p>
+          </div>
+
+          <div class="kpi-stat-card flats">
+            <div class="kpi-card-header">
+              <span class="title">Registered Flats</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <h3 class="stat-value" id="landing-stat-flats" style="color: #a78bfa;">--</h3>
+            <p class="stat-sub">Apartments in society database</p>
+          </div>
+        </div>
+
+        <div class="telemetry-banner">
+          <div class="telemetry-left">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            <span>Live API Endpoint: <code>GET http://localhost:8080/api/parking/dashboard</code></span>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="fetchLandingData()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
+            <span>Refresh Telemetry</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Enterprise Capabilities</span>
+          <h2 class="section-title">Built for Modern Residential Societies</h2>
+          <p class="section-subtitle">A purpose-built suite of tools engineered for gate security guards and residential associations.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+            </div>
+            <h4 class="feature-title">1. Smart Parking Slot Management</h4>
+            <p class="feature-desc">Visual inventory of all society parking bays. Prevents double-booking by enforcing atomic slot locking in the database.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            </div>
+            <h4 class="feature-title">2. Visitor Registration</h4>
+            <p class="feature-desc">Log guest vehicle plates, visitor names, and visited apartment numbers with strict Jakarta Bean Validation.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h4 class="feature-title">3. Vehicle Entry & Exit Tracking</h4>
+            <p class="feature-desc">Accurate entry timestamps upon arrival. Instant release upon checkout making the bay immediately available for reuse.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <h4 class="feature-title">4. Real-Time Parking Availability</h4>
+            <p class="feature-desc">Dynamic occupancy percentages and color-coded status badges keep guards informed without manual yard inspections.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <h4 class="feature-title">5. Society Flat Management</h4>
+            <p class="feature-desc">Centralized database linking every visiting car directly to resident flat numbers, owner names, and contact records.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <h4 class="feature-title">6. Visitor History & Daily Reports</h4>
+            <p class="feature-desc">Filter security audit reports by calendar date. Easily export logs or review vehicle stay durations for society auditing.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS SECTION -->
+    <section class="how-it-works-section" id="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Operational Workflow</span>
+          <h2 class="section-title">How It Works at the Gate</h2>
+          <p class="section-subtitle">A streamlined 5-step process ensuring zero parking conflicts and complete accountability.</p>
+        </div>
+
+        <div class="workflow-timeline">
+          <div class="workflow-step-card">
+            <div class="step-number">1</div>
+            <h5 class="step-title">Register Visitor</h5>
+            <p class="step-text">Security guard enters guest vehicle plate and selects the host flat number.</p>
+          </div>
+
+          <div class="workflow-step-card">
+            <div class="step-number">2</div>
+            <h5 class="step-title">Record Entry</h5>
+            <p class="step-text">Guard picks an available bay from the dynamic dropdown and confirms allocation.</p>
+          </div>
+
+          <div class="workflow-step-card">
+            <div class="step-number">3</div>
+            <h5 class="step-title">Track Occupancy</h5>
+            <p class="step-text">Slot status updates to Occupied across the system to prevent double allocation.</p>
+          </div>
+
+          <div class="workflow-step-card">
+            <div class="step-number">4</div>
+            <h5 class="step-title">Record Vehicle Exit</h5>
+            <p class="step-text">When leaving, guard clicks Exit, timestamping departure and freeing the bay immediately.</p>
+          </div>
+
+          <div class="workflow-step-card">
+            <div class="step-number">5</div>
+            <h5 class="step-title">Daily Reports</h5>
+            <p class="step-text">Facility managers generate daily visitor logs for verification and security audit.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARKING AVAILABILITY PREVIEW -->
+    <section class="preview-grid-section" id="parking-preview">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Live Slot Inventory</span>
+          <h2 class="section-title">Parking Availability Preview</h2>
+          <p class="section-subtitle">Real-time status of society visitor parking bays fetched directly from the database.</p>
+        </div>
+
+        <div class="mini-slots-grid" id="mini-slots-container">
+          <!-- Dynamically populated from /api/parking/slots -->
+          <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">
+            Connecting to Spring Boot backend on port 8080...
+          </div>
+        </div>
+
+        <div style="text-align: center;">
+          <button class="btn btn-primary" onclick="switchView('dashboard')">
+            <span>Manage Slots in Full Dashboard</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFITS SECTION -->
+    <section class="benefits-section" id="benefits">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Proven Value</span>
+          <h2 class="section-title">Why Societies Choose ParkSpot</h2>
+          <p class="section-subtitle">Replacing paper registers with digital intelligence for enhanced security and peace of mind.</p>
+        </div>
+
+        <div class="benefits-grid">
+          <div class="benefit-item-card">
+            <div class="benefit-check-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="benefit-content">
+              <h5>Faster Visitor Entry</h5>
+              <p>Security logs vehicles in under 10 seconds, eliminating long queues at the society main gate.</p>
+            </div>
+          </div>
+
+          <div class="benefit-item-card">
+            <div class="benefit-check-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="benefit-content">
+              <h5>Better Parking Visibility</h5>
+              <p>Know exactly which slots are open in real time without needing security guards to walk the parking lot.</p>
+            </div>
+          </div>
+
+          <div class="benefit-item-card">
+            <div class="benefit-check-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="benefit-content">
+              <h5>Organized Visitor Records</h5>
+              <p>All visitor logs are stored reliably in MySQL, eliminating torn physical notebooks and missing data.</p>
+            </div>
+          </div>
+
+          <div class="benefit-item-card">
+            <div class="benefit-check-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="benefit-content">
+              <h5>Easier Society Administration</h5>
+              <p>Resolve resident disputes with verified audit timestamps showing entry and exit times.</p>
+            </div>
+          </div>
+
+          <div class="benefit-item-card">
+            <div class="benefit-check-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="benefit-content">
+              <h5>Optimized Space Utilization</h5>
+              <p>Slots become available the moment a car checks out, maximizing utility for limited visitor spaces.</p>
+            </div>
+          </div>
+
+          <div class="benefit-item-card">
+            <div class="benefit-check-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="benefit-content">
+              <h5>Multi-Profile Deployment</h5>
+              <p>Seamlessly transitions from lightweight in-memory H2 mode to full MySQL production environments.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALL TO ACTION BANNER -->
+    <section class="cta-banner-section" id="contact">
+      <div class="container">
+        <div class="cta-banner-card">
+          <h2>Ready to Modernize Your Society's Parking?</h2>
+          <p>Experience intelligent visitor tracking, real-time bay allocation, and zero disputes. Launch the management console right now.</p>
+          <button class="btn btn-primary" onclick="switchView('dashboard')" style="padding: 1rem 2.2rem; font-size: 1.05rem;">
+            <span>Open Management Dashboard</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LANDING FOOTER -->
+    <footer class="landing-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="brand-name" style="font-size: 1.35rem; color:#fff;">ParkSpot<span class="dot">.</span></div>
+            <p>Smart Society Visitor Parking Management System. An intelligent platform built for residential gated communities, powered by Java Spring Boot and modern web technologies.</p>
+          </div>
+
+          <div class="footer-col">
+            <h5>Navigation</h5>
+            <ul class="footer-links">
+              <li><a href="#home">Home</a></li>
+              <li><a href="#live-overview">Live Overview</a></li>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#how-it-works">How It Works</a></li>
+              <li><a href="#parking-preview">Parking Grid</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h5>Product</h5>
+            <ul class="footer-links">
+              <li><a href="javascript:void(0)" onclick="switchView('dashboard')">Management Dashboard</a></li>
+              <li><a href="#benefits">Society Benefits</a></li>
+              <li><a href="http://localhost:8080/swagger-ui.html" target="_blank">Developer Swagger UI</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h5>System Architecture</h5>
+            <ul class="footer-links" style="color: var(--text-dim); font-size: 0.8rem;">
+              <li>Backend: Spring Boot 3.2.5</li>
+              <li>Persistence: Hibernate & JPA</li>
+              <li>Database: MySQL 8.0 / H2</li>
+              <li>Architecture: RESTful Microservices</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div>© 2026 ParkSpot. Society Visitor Parking Slot Tracker. All rights reserved.</div>
+          <div style="font-family: var(--font-mono); font-size: 0.75rem;">Status: <span style="color: #34d399;">Operational</span></div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       2. MANAGEMENT DASHBOARD VIEW (APP CONSOLE)
+       ═══════════════════════════════════════════════════════════════ -->
+  <div id="dashboard-view">
+    
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand-section">
+        <div class="brand-icon" style="width: 36px; height: 36px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+        </div>
+        <div>
+          <div style="font-weight: 800; font-size: 1.05rem; color: #fff;">ParkSpot</div>
+          <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase;">Management Console</div>
+        </div>
+      </div>
+
+      <div class="nav-menu">
+        <div class="nav-section-title">Navigation</div>
+        <div class="nav-item active" onclick="switchDashboardTab('dash')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Dashboard</span>
+        </div>
+        <div class="nav-item" onclick="switchDashboardTab('slots')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <span>Parking Slots</span>
+        </div>
+        <div class="nav-item" onclick="switchDashboardTab('visitors')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Visitor Management</span>
+        </div>
+        <div class="nav-item" onclick="switchDashboardTab('flats')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Society Flats</span>
+        </div>
+        <div class="nav-item" onclick="switchDashboardTab('report')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Daily Audit Report</span>
+        </div>
+
+        <div class="nav-section-title" style="margin-top: 1rem;">Actions</div>
+        <div class="nav-item" onclick="openEntryModal()" style="color: #34d399;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span>+ Log Visitor Entry</span>
+        </div>
+        <div class="nav-item" onclick="switchView('landing')" style="margin-top: auto; border-top: 1px solid var(--border-subtle); color: #60a5fa;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          <span>← Back to Website</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- DASHBOARD MAIN -->
+    <div class="main-wrapper">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <button class="btn btn-outline btn-sm" onclick="switchView('landing')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            <span>Back to Landing Page</span>
+          </button>
+          <div class="header-title">
+            <h2 id="current-view-title">Executive Dashboard</h2>
+            <p id="current-view-sub">Real-time society parking occupancy telemetry</p>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button class="btn btn-primary btn-sm" onclick="openEntryModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>Log Visitor Entry</span>
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="refreshAllData()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
+            <span>Sync</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        
+        <!-- PANEL A: DASHBOARD OVERVIEW -->
+        <div id="tab-dash" class="view-panel active">
+          <div class="live-kpi-grid">
+            <div class="kpi-stat-card total">
+              <div class="kpi-card-header"><span class="title">Total Slots</span></div>
+              <h3 class="stat-value" id="dash-stat-total">--</h3>
+              <p class="stat-sub">Configured bays</p>
+            </div>
+            <div class="kpi-stat-card available">
+              <div class="kpi-card-header"><span class="title">Available</span></div>
+              <h3 class="stat-value" id="dash-stat-available" style="color: #34d399;">--</h3>
+              <p class="stat-sub">Free for assignment</p>
+            </div>
+            <div class="kpi-stat-card occupied">
+              <div class="kpi-card-header"><span class="title">Occupied</span></div>
+              <h3 class="stat-value" id="dash-stat-occupied" style="color: #f87171;">--</h3>
+              <p class="stat-sub">Parked vehicles</p>
+            </div>
+            <div class="kpi-stat-card visitors">
+              <div class="kpi-card-header"><span class="title">Visitors Today</span></div>
+              <h3 class="stat-value" id="dash-stat-today" style="color: #fbbf24;">--</h3>
+              <p class="stat-sub">Daily entries</p>
+            </div>
+            <div class="kpi-stat-card flats">
+              <div class="kpi-card-header"><span class="title">Total Flats</span></div>
+              <h3 class="stat-value" id="dash-stat-flats" style="color: #a78bfa;">--</h3>
+              <p class="stat-sub">Registered apartments</p>
+            </div>
+          </div>
+
+          <!-- Quick Launch -->
+          <div style="display: flex; gap: 1rem; margin: 1.5rem 0;">
+            <button class="btn btn-outline btn-sm" onclick="switchDashboardTab('slots')">View All Parking Slots →</button>
+            <button class="btn btn-outline btn-sm" onclick="switchDashboardTab('visitors')">View Visitor Log →</button>
+            <button class="btn btn-outline btn-sm" onclick="switchDashboardTab('flats')">Manage Flats →</button>
+          </div>
+
+          <!-- Recent Activity Table -->
+          <div class="data-table-container">
+            <div style="padding: 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+              <h4 style="font-size: 1rem; font-weight: 700; color: #fff;">Recent Active Visitor Vehicles</h4>
+              <span class="badge badge-primary">Live Sessions</span>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Vehicle No</th>
+                  <th>Visitor Name</th>
+                  <th>Flat Visited</th>
+                  <th>Slot Bay</th>
+                  <th>Entry Time</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dash-recent-tbody">
+                <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading real-time active records...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PANEL B: PARKING SLOTS GRID -->
+        <div id="tab-slots" class="view-panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800; color: #fff;">Society Parking Bays</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Select any available slot to allocate or click occupied to check out</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn btn-outline btn-sm" onclick="filterSlotCards('all')">All</button>
+              <button class="btn btn-outline btn-sm" onclick="filterSlotCards('available')">Available Only</button>
+              <button class="btn btn-outline btn-sm" onclick="filterSlotCards('occupied')">Occupied Only</button>
+              <button class="btn btn-primary btn-sm" onclick="openAddSlotModal()">+ Add Bay</button>
+            </div>
+          </div>
+          <div class="slots-grid" id="full-slots-grid">
+            <!-- Populated via loadParkingSlots() -->
+          </div>
+        </div>
+
+        <!-- PANEL C: VISITOR MANAGEMENT -->
+        <div id="tab-visitors" class="view-panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800; color: #fff;">Visitor Vehicle Audit Registry</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Search and view all visitor sessions logged in the society database</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem;">
+              <input type="text" id="visitor-search-input" class="form-control" placeholder="Search vehicle or visitor..." style="width: 250px; padding: 0.45rem 0.85rem;" oninput="handleVisitorSearch(this.value)">
+              <button class="btn btn-primary btn-sm" onclick="openEntryModal()">+ New Entry</button>
+            </div>
+          </div>
+          <div class="data-table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Vehicle Number</th>
+                  <th>Visitor Name</th>
+                  <th>Flat Visited</th>
+                  <th>Slot Assigned</th>
+                  <th>Entry Timestamp</th>
+                  <th>Exit Timestamp</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="visitors-table-body">
+                <tr><td colspan="8" style="text-align: center; color: var(--text-muted);">Loading records...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PANEL D: SOCIETY FLATS -->
+        <div id="tab-flats" class="view-panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800; color: #fff;">Registered Society Flats</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Apartment and resident directory used for visitor verification</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openAddFlatModal()">+ Register Flat</button>
+          </div>
+          <div class="slots-grid" id="flats-cards-container">
+            <!-- Populated via loadFlats() -->
+          </div>
+        </div>
+
+        <!-- PANEL E: DAILY AUDIT REPORT -->
+        <div id="tab-report" class="view-panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800; color: #fff;">Daily Visitor Log Report</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Query complete chronological vehicle logs by specific date</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+              <input type="date" id="report-date-picker" class="form-control" style="width: auto; padding: 0.45rem 0.85rem;" onchange="loadDailyReport(this.value)">
+              <button class="btn btn-outline btn-sm" onclick="window.print()">Print / Export PDF</button>
+            </div>
+          </div>
+          <div class="data-table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Entry ID</th>
+                  <th>Vehicle Number</th>
+                  <th>Visitor Name</th>
+                  <th>Flat Number</th>
+                  <th>Slot Assigned</th>
+                  <th>Entry Timestamp</th>
+                  <th>Exit Timestamp</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="report-table-body">
+                <tr><td colspan="8" style="text-align: center; color: var(--text-muted);">Select a date above to load report.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MODALS FOR ENTRY, EXIT, ADD FLAT, ADD SLOT
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- Modal: Log Visitor Entry -->
+  <div class="modal-backdrop" id="modal-entry">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Log Visitor Vehicle Entry</h3>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-entry')">✕</button>
+      </div>
+      <form id="form-entry" onsubmit="handleEntrySubmit(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Vehicle Registration Number *</label>
+            <input type="text" id="entry-vehicle" class="form-control" placeholder="e.g. KA-05-MJ-4040" required maxlength="20" style="text-transform: uppercase; font-family: var(--font-mono);">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Visitor / Driver Full Name</label>
+            <input type="text" id="entry-visitor" class="form-control" placeholder="e.g. Vikram Malhotra" maxlength="100">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Host Flat Visited *</label>
+            <select id="entry-flat" class="form-control" required>
+              <option value="">Select Flat...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Assign Parking Bay *</label>
+            <select id="entry-slot" class="form-control" required>
+              <option value="">Select Free Slot...</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeModal('modal-entry')">Cancel</button>
+          <button type="submit" id="btn-submit-entry" class="btn btn-primary btn-sm">Confirm & Allocate Slot</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Confirm Exit -->
+  <div class="modal-backdrop" id="modal-exit">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Release Parking Slot & Confirm Exit</h3>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-exit')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Are you sure you want to mark this vehicle as exited? The assigned bay will be freed immediately for other visitors.</p>
+        <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-md); font-size: 0.85rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span style="color: var(--text-dim);">Vehicle Plate:</span>
+            <span id="exit-modal-plate" style="font-family: var(--font-mono); font-weight: 700; color: #fff;">--</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span style="color: var(--text-dim);">Visitor Name:</span>
+            <span id="exit-modal-visitor" style="font-weight: 600; color: #fff;">--</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span style="color: var(--text-dim);">Host Flat:</span>
+            <span id="exit-modal-flat" style="font-weight: 600; color: #60a5fa;">--</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--text-dim);">Slot Bay:</span>
+            <span id="exit-modal-slot" style="font-family: var(--font-mono); font-weight: 700; color: #34d399;">--</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeModal('modal-exit')">Cancel</button>
+        <button type="button" id="btn-confirm-exit" class="btn btn-success btn-sm" onclick="executeExit()">Confirm Vehicle Exit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Register Flat -->
+  <div class="modal-backdrop" id="modal-flat">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Register New Society Flat</h3>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-flat')">✕</button>
+      </div>
+      <form id="form-flat" onsubmit="handleFlatSubmit(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Flat Number *</label>
+            <input type="text" id="flat-number" class="form-control" placeholder="e.g. C-302" required maxlength="20">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Resident / Owner Name</label>
+            <input type="text" id="flat-owner" class="form-control" placeholder="e.g. Sunita Nair" maxlength="100">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Contact Number</label>
+            <input type="text" id="flat-contact" class="form-control" placeholder="e.g. +91 98765 43210" maxlength="20">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeModal('modal-flat')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Register Flat</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Slot -->
+  <div class="modal-backdrop" id="modal-slot">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Create Parking Slot Bay</h3>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-slot')">✕</button>
+      </div>
+      <form id="form-slot" onsubmit="handleSlotSubmit(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Slot Number (Positive Integer) *</label>
+            <input type="number" id="slot-number-input" class="form-control" placeholder="e.g. 21" required min="1">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeModal('modal-slot')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Create Slot</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Real-time Toast Notifications -->
+  <div id="toast-container"></div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       JAVASCRIPT ARCHITECTURE & REAL-TIME API CLIENT
+       ═══════════════════════════════════════════════════════════════ -->
+  <script>
+    // Configurable API URL with LocalStorage and environment detection (Vercel & cloud deployment ready)
+    let API_BASE = localStorage.getItem('parkspot_api_base') || 
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? (window.location.port === '8080' ? '/api' : 'http://localhost:8080/api')
+        : (window.location.protocol === 'https:' ? 'https://' + window.location.hostname + '/api' : 'http://localhost:8080/api'));
+
+    function configureApiBase() {
+      const current = localStorage.getItem('parkspot_api_base') || API_BASE;
+      const customUrl = prompt('Configure Backend API Base URL (e.g. http://localhost:8080/api or https://your-backend.railway.app/api):', current);
+      if (customUrl !== null) {
+        if (customUrl.trim()) {
+          const cleaned = customUrl.trim().replace(/\/$/, '');
+          localStorage.setItem('parkspot_api_base', cleaned);
+          API_BASE = cleaned;
+          showToast('API URL updated: ' + API_BASE, 'success');
+        } else {
+          localStorage.removeItem('parkspot_api_base');
+          showToast('Reset to default API URL', 'info');
+        }
+        refreshAllData();
+        fetchLandingData();
+      }
+    }
+
+    const appState = {
+      dashboardData: null,
+      slots: [],
+      flats: [],
+      visitors: [],
+      selectedExitVehicleId: null
+    };
+
+    // ─── ROUTING & VIEW SWITCHING ───
+
+    function switchView(viewName) {
+      const landingEl = document.getElementById('landing-page-view');
+      const dashEl = document.getElementById('dashboard-view');
+
+      if (viewName === 'dashboard') {
+        landingEl.style.display = 'none';
+        dashEl.classList.add('active');
+        window.location.hash = 'dashboard';
+        window.scrollTo(0, 0);
+        refreshAllData();
+      } else {
+        dashEl.classList.remove('active');
+        landingEl.style.display = 'block';
+        window.location.hash = '';
+        window.scrollTo(0, 0);
+        fetchLandingData();
+      }
+    }
+
+    function switchDashboardTab(tabName) {
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+      const targetTab = document.getElementById(`tab-${tabName}`);
+      if (targetTab) targetTab.classList.add('active');
+
+      const titles = {
+        dash: ['Executive Dashboard', 'Real-time society parking occupancy telemetry'],
+        slots: ['Parking Slots Grid', 'Interactive visual view of society parking bays'],
+        visitors: ['Visitor Management', 'Audit registry of all visitor entries and check-outs'],
+        flats: ['Society Flats', 'Registered apartment residences and contact records'],
+        report: ['Daily Audit Report', 'Chronological security log queryable by calendar date']
+      };
+
+      if (titles[tabName]) {
+        document.getElementById('current-view-title').innerText = titles[tabName][0];
+        document.getElementById('current-view-sub').innerText = titles[tabName][1];
+      }
+
+      const activeNav = Array.from(document.querySelectorAll('.nav-item')).find(el => 
+        el.getAttribute('onclick') && el.getAttribute('onclick').includes(tabName)
+      );
+      if (activeNav) activeNav.classList.add('active');
+    }
+
+    // Check hash on load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.location.hash === '#dashboard') {
+        switchView('dashboard');
+      } else {
+        fetchLandingData();
+      }
+      
+      // Default report date to today
+      const todayIso = new Date().toISOString().split('T')[0];
+      const datePicker = document.getElementById('report-date-picker');
+      if (datePicker) datePicker.value = todayIso;
+    });
+
+    // ─── API LOADERS ───
+
+    async function fetchLandingData() {
+      const pill = document.getElementById('landing-backend-pill');
+      try {
+        const res = await fetch(`${API_BASE}/parking/dashboard`);
+        if (!res.ok) throw new Error('Backend HTTP ' + res.status);
+        const data = await res.json();
+
+        // Update landing metrics
+        document.getElementById('landing-stat-total').innerText = data.totalSlots ?? '--';
+        document.getElementById('landing-stat-available').innerText = data.availableSlots ?? '--';
+        document.getElementById('landing-stat-occupied').innerText = data.occupiedSlots ?? '--';
+        document.getElementById('landing-stat-today').innerText = data.totalVisitorsToday ?? '--';
+        document.getElementById('landing-stat-flats').innerText = data.totalFlats ?? '--';
+        document.getElementById('hero-available-count').innerText = `${data.availableSlots ?? 0} Bays`;
+
+        pill.innerHTML = `<div class="status-pulse"></div><span>🟢 Live Society Feed</span>`;
+        pill.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+      } catch (err) {
+        console.warn('Landing data fetch error:', err);
+        pill.innerHTML = `<span style="color:#f87171;">⚠️ Offline / Connecting</span>`;
+        pill.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+      }
+
+      // Fetch mini-slots preview
+      loadMiniSlotsPreview();
+    }
+
+    async function loadMiniSlotsPreview() {
+      const container = document.getElementById('mini-slots-container');
+      try {
+        const res = await fetch(`${API_BASE}/parking/slots`);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const slots = await res.json();
+
+        container.innerHTML = '';
+        const previewList = slots.slice(0, 10); // Display first 10 slots on landing
+        previewList.forEach(s => {
+          const card = document.createElement('div');
+          card.className = `mini-bay-card ${s.occupied ? 'occupied' : 'available'}`;
+          card.innerHTML = `
+            <div class="mini-bay-top">
+              <span class="mini-bay-num">Bay #${s.slotNumber}</span>
+              <span class="badge ${s.occupied ? 'badge-danger' : 'badge-success'}">${s.occupied ? 'Occupied' : 'Vacant'}</span>
+            </div>
+            ${s.occupied ? `
+              <div class="mini-bay-plate">${escapeHtml(s.currentVehicleNumber || 'PARKED')}</div>
+              <div class="mini-bay-sub">Visiting Flat ${escapeHtml(s.currentFlatNumber || '—')}</div>
+            ` : `
+              <div style="font-size: 0.75rem; color: #34d399; font-weight:600;">Ready for Allocation</div>
+              <div class="mini-bay-sub">Instant Assignment</div>
+            `}
+          `;
+          container.appendChild(card);
+        });
+      } catch (e) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-dim);">
+            Backend API offline or unreachable. Please start Spring Boot via <code>mvn spring-boot:run</code>
+          </div>
+        `;
+      }
+    }
+
+    async function refreshAllData() {
+      await Promise.all([
+        loadDashboard(),
+        loadParkingSlots(),
+        loadAllVisitors(),
+        loadFlats()
+      ]);
+    }
+
+    async function loadDashboard() {
+      try {
+        const res = await fetch(`${API_BASE}/parking/dashboard`);
+        if (!res.ok) throw new Error('Failed to load dashboard metrics');
+        const data = await res.json();
+        appState.dashboardData = data;
+
+        document.getElementById('dash-stat-total').innerText = data.totalSlots ?? '--';
+        document.getElementById('dash-stat-available').innerText = data.availableSlots ?? '--';
+        document.getElementById('dash-stat-occupied').innerText = data.occupiedSlots ?? '--';
+        document.getElementById('dash-stat-today').innerText = data.totalVisitorsToday ?? '--';
+        document.getElementById('dash-stat-flats').innerText = data.totalFlats ?? '--';
+      } catch (err) {
+        showToast('Dashboard load error: ' + err.message, 'error');
+      }
+    }
+
+    async function loadParkingSlots() {
+      try {
+        const res = await fetch(`${API_BASE}/parking/slots`);
+        if (!res.ok) throw new Error('Failed to load parking slots');
+        const slots = await res.json();
+        appState.slots = slots;
+
+        renderSlotsGrid(slots);
+        renderRecentActiveTable(slots);
+      } catch (err) {
+        showToast('Slots load error: ' + err.message, 'error');
+      }
+    }
+
+    function renderSlotsGrid(slots) {
+      const grid = document.getElementById('full-slots-grid');
+      grid.innerHTML = '';
+
+      if (slots.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">No parking slots found in database.</div>';
+        return;
+      }
+
+      slots.forEach(s => {
+        const card = document.createElement('div');
+        card.className = `slot-card ${s.occupied ? 'occupied' : 'available'}`;
+        card.setAttribute('data-status', s.occupied ? 'occupied' : 'available');
+
+        if (s.occupied) {
+          card.innerHTML = `
+            <div class="slot-header">
+              <span class="slot-num-badge">Bay #${s.slotNumber}</span>
+              <span class="badge badge-danger">Occupied</span>
+            </div>
+            <div class="slot-plate-box">
+              <span class="ind-badge">IND</span>
+              <span>${escapeHtml(s.currentVehicleNumber || 'VEHICLE')}</span>
+            </div>
+            <div style="font-size: 0.8rem; margin: 0.25rem 0;">
+              <span style="color: var(--text-dim);">Visitor:</span> <strong>${escapeHtml(s.currentVisitorName || 'Guest')}</strong>
+            </div>
+            <div style="font-size: 0.8rem; margin-bottom: 0.75rem;">
+              <span style="color: var(--text-dim);">Visiting:</span> <span class="badge badge-primary">Flat ${escapeHtml(s.currentFlatNumber || '—')}</span>
+            </div>
+            <button class="btn btn-outline btn-sm" style="margin-top: auto; border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;" onclick="findAndExitBySlot(${s.slotNumber}, '${escapeHtml(s.currentVehicleNumber)}')">
+              Exit Vehicle & Free Bay
+            </button>
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="slot-header">
+              <span class="slot-num-badge">Bay #${s.slotNumber}</span>
+              <span class="badge badge-success">Vacant</span>
+            </div>
+            <div style="padding: 1.5rem 0; text-align: center; color: #34d399;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+              <div style="font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem;">Available For Visitor</div>
+            </div>
+            <button class="btn btn-success btn-sm" style="margin-top: auto;" onclick="openEntryModal(${s.slotNumber})">
+              + Quick Allocate
+            </button>
+          `;
+        }
+
+        grid.appendChild(card);
+      });
+    }
+
+    function renderRecentActiveTable(slots) {
+      const tbody = document.getElementById('dash-recent-tbody');
+      tbody.innerHTML = '';
+
+      const occupiedSlots = slots.filter(s => s.occupied);
+      if (occupiedSlots.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-dim); padding: 2rem;">No visitor vehicles currently parked. All bays available!</td></tr>';
+        return;
+      }
+
+      occupiedSlots.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span style="font-family: var(--font-mono); font-weight: 700; color: #fff;">${escapeHtml(s.currentVehicleNumber)}</span></td>
+          <td>${escapeHtml(s.currentVisitorName || 'Guest')}</td>
+          <td><span class="badge badge-primary">Flat ${escapeHtml(s.currentFlatNumber)}</span></td>
+          <td><span style="font-family: var(--font-mono); font-weight:700;">#${s.slotNumber}</span></td>
+          <td style="font-size:0.8rem; color: var(--text-muted);">${formatTimestamp(s.entryTime)}</td>
+          <td><span class="badge badge-danger">Parked</span></td>
+          <td>
+            <button class="btn btn-outline btn-sm" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;" onclick="findAndExitBySlot(${s.slotNumber}, '${escapeHtml(s.currentVehicleNumber)}')">
+              Mark Exit
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterSlotCards(filter) {
+      const cards = document.querySelectorAll('.slot-card');
+      cards.forEach(c => {
+        if (filter === 'all') c.style.display = 'flex';
+        else if (c.getAttribute('data-status') === filter) c.style.display = 'flex';
+        else c.style.display = 'none';
+      });
+    }
+
+    async function loadAllVisitors() {
+      const tbody = document.getElementById('visitors-table-body');
+      try {
+        const todayIso = new Date().toISOString().split('T')[0];
+        const res = await fetch(`${API_BASE}/parking/report/daily?date=${todayIso}`);
+        if (!res.ok) throw new Error('Failed to load visitors registry');
+        const list = await res.json();
+        appState.visitors = list;
+
+        renderVisitorsTable(list);
+      } catch (err) {
+        console.warn('Visitors load error:', err);
+      }
+    }
+
+    function renderVisitorsTable(list) {
+      const tbody = document.getElementById('visitors-table-body');
+      tbody.innerHTML = '';
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-dim); padding: 2.5rem;">No visitor sessions recorded yet today.</td></tr>';
+        return;
+      }
+
+      list.forEach(v => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span style="font-family: var(--font-mono); font-weight: 700; color: #fff;">${escapeHtml(v.vehicleNumber)}</span></td>
+          <td>${escapeHtml(v.visitorName || 'Guest')}</td>
+          <td><span class="badge badge-primary">Flat ${escapeHtml(v.flatNumber)}</span></td>
+          <td><span style="font-family: var(--font-mono); font-weight: 700;">#${v.slotNumber}</span></td>
+          <td style="font-size: 0.8rem; color: var(--text-muted);">${formatTimestamp(v.entryTime)}</td>
+          <td style="font-size: 0.8rem; color: var(--text-muted);">${v.exitTime ? formatTimestamp(v.exitTime) : '<span style="color:var(--text-dim)">— Active</span>'}</td>
+          <td>
+            <span class="badge ${v.currentlyParked ? 'badge-danger' : 'badge-success'}">
+              ${v.currentlyParked ? '● Parked' : '✓ Exited'}
+            </span>
+          </td>
+          <td>
+            ${v.currentlyParked ? `
+              <button class="btn btn-outline btn-sm" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;" onclick="openExitConfirmation(${v.id}, '${escapeHtml(v.vehicleNumber)}', '${escapeHtml(v.visitorName)}', '${escapeHtml(v.flatNumber)}', ${v.slotNumber})">
+                Check Out
+              </button>
+            ` : '—'}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function handleVisitorSearch(query) {
+      const q = query.trim().toUpperCase();
+      if (!q) {
+        renderVisitorsTable(appState.visitors);
+        return;
+      }
+      const filtered = appState.visitors.filter(v => 
+        (v.vehicleNumber && v.vehicleNumber.toUpperCase().includes(q)) ||
+        (v.visitorName && v.visitorName.toUpperCase().includes(q)) ||
+        (v.flatNumber && v.flatNumber.toUpperCase().includes(q))
+      );
+      renderVisitorsTable(filtered);
+    }
+
+    async function loadFlats() {
+      const container = document.getElementById('flats-cards-container');
+      try {
+        const res = await fetch(`${API_BASE}/flats`);
+        if (!res.ok) throw new Error('Failed to load society flats');
+        const flats = await res.json();
+        appState.flats = flats;
+
+        container.innerHTML = '';
+        flats.forEach(f => {
+          const card = document.createElement('div');
+          card.className = 'slot-card';
+          card.innerHTML = `
+            <div class="slot-header">
+              <span class="slot-num-badge" style="color: #60a5fa;">Flat ${escapeHtml(f.flatNumber)}</span>
+              <span class="badge badge-primary">Resident</span>
+            </div>
+            <div style="font-size: 0.9rem; font-weight: 700; color: #fff; margin: 0.5rem 0;">${escapeHtml(f.ownerName || 'Society Member')}</div>
+            <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.75rem;">
+              Contact: <strong>${escapeHtml(f.contactNumber || 'Not specified')}</strong>
+            </div>
+            <button class="btn btn-outline btn-sm" style="margin-top: auto;" onclick="openEntryModal(null, '${escapeHtml(f.flatNumber)}')">
+              + Assign Visitor
+            </button>
+          `;
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.warn('Flats load error:', err);
+      }
+    }
+
+    async function loadDailyReport(dateStr) {
+      if (!dateStr) return;
+      const tbody = document.getElementById('report-table-body');
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading audit report...</td></tr>';
+
+      try {
+        const res = await fetch(`${API_BASE}/parking/report/daily?date=${dateStr}`);
+        if (!res.ok) throw new Error('Report query failed');
+        const list = await res.json();
+
+        tbody.innerHTML = '';
+        if (list.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-dim); padding: 2.5rem;">No visitor entries logged on ${dateStr}.</td></tr>`;
+          return;
+        }
+
+        list.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>#${item.id}</td>
+            <td><span style="font-family: var(--font-mono); font-weight: 700; color: #fff;">${escapeHtml(item.vehicleNumber)}</span></td>
+            <td>${escapeHtml(item.visitorName || 'Guest')}</td>
+            <td><span class="badge badge-primary">Flat ${escapeHtml(item.flatNumber)}</span></td>
+            <td><span style="font-family: var(--font-mono); font-weight: 700;">#${item.slotNumber}</span></td>
+            <td style="font-size: 0.8rem; color: var(--text-muted);">${formatTimestamp(item.entryTime)}</td>
+            <td style="font-size: 0.8rem; color: var(--text-muted);">${item.exitTime ? formatTimestamp(item.exitTime) : '<span style="color:var(--text-dim)">— Active</span>'}</td>
+            <td><span class="badge ${item.currentlyParked ? 'badge-danger' : 'badge-success'}">${item.currentlyParked ? '● Parked' : '✓ Exited'}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        showToast('Report error: ' + err.message, 'error');
+      }
+    }
+
+    // ─── MODALS & SUBMISSIONS ───
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    async function openEntryModal(preSelectSlot = null, preSelectFlat = null) {
+      openModal('modal-entry');
+      document.getElementById('form-entry').reset();
+
+      // Populate Flats
+      const flatSelect = document.getElementById('entry-flat');
+      flatSelect.innerHTML = '<option value="">Select Flat...</option>';
+      try {
+        const flatRes = await fetch(`${API_BASE}/flats`);
+        const flats = await flatRes.json();
+        flats.forEach(f => {
+          const opt = document.createElement('option');
+          opt.value = f.flatNumber;
+          opt.innerText = `${f.flatNumber} — ${f.ownerName || 'Resident'}`;
+          if (preSelectFlat && f.flatNumber === preSelectFlat) opt.selected = true;
+          flatSelect.appendChild(opt);
+        });
+      } catch (e) {
+        console.warn('Flats dropdown load error:', e);
+      }
+
+      // Populate Free Slots
+      const slotSelect = document.getElementById('entry-slot');
+      slotSelect.innerHTML = '<option value="">Select Free Slot...</option>';
+      try {
+        const slotRes = await fetch(`${API_BASE}/parking/slots/available`);
+        const availableSlots = await slotRes.json();
+
+        if (availableSlots.length === 0) {
+          slotSelect.innerHTML = '<option value="">⚠️ Society Visitor Parking Full</option>';
+        } else {
+          availableSlots.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.slotNumber;
+            opt.innerText = `Bay #${s.slotNumber} (Available)`;
+            if (preSelectSlot && s.slotNumber === preSelectSlot) opt.selected = true;
+            slotSelect.appendChild(opt);
+          });
+        }
+      } catch (e) {
+        console.warn('Slots dropdown load error:', e);
+      }
+    }
+
+    async function handleEntrySubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-submit-entry');
+      btn.disabled = true;
+      btn.innerText = 'Allocating...';
+
+      const payload = {
+        vehicleNumber: document.getElementById('entry-vehicle').value.trim().toUpperCase(),
+        visitorName: document.getElementById('entry-visitor').value.trim(),
+        flatNumber: document.getElementById('entry-flat').value.trim(),
+        slotNumber: parseInt(document.getElementById('entry-slot').value, 10)
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/parking/entry`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || data.error || 'Failed to allocate slot');
+
+        showToast(`Vehicle ${payload.vehicleNumber} parked in Bay #${payload.slotNumber}!`, 'success');
+        closeModal('modal-entry');
+        refreshAllData();
+        fetchLandingData();
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Confirm & Allocate Slot';
+      }
+    }
+
+    function openExitConfirmation(vehicleId, vehicleNumber, visitorName, flatNumber, slotNumber) {
+      appState.selectedExitVehicleId = vehicleId;
+      document.getElementById('exit-modal-plate').innerText = vehicleNumber;
+      document.getElementById('exit-modal-visitor').innerText = visitorName || 'Guest';
+      document.getElementById('exit-modal-flat').innerText = `Flat ${flatNumber}`;
+      document.getElementById('exit-modal-slot').innerText = `Bay #${slotNumber}`;
+      openModal('modal-exit');
+    }
+
+    async function findAndExitBySlot(slotNumber, vehicleNumber) {
+      try {
+        const res = await fetch(`${API_BASE}/parking/search?vehicleNumber=${encodeURIComponent(vehicleNumber)}`);
+        const list = await res.json();
+        const active = list.find(v => v.currentlyParked && v.slotNumber === slotNumber);
+        if (!active) throw new Error('Active vehicle record not found');
+        openExitConfirmation(active.id, active.vehicleNumber, active.visitorName, active.flatNumber, active.slotNumber);
+      } catch (err) {
+        showToast('Exit lookup error: ' + err.message, 'error');
+      }
+    }
+
+    async function executeExit() {
+      const vehicleId = appState.selectedExitVehicleId;
+      if (!vehicleId) return;
+
+      const btn = document.getElementById('btn-confirm-exit');
+      btn.disabled = true;
+      btn.innerText = 'Releasing...';
+
+      try {
+        const res = await fetch(`${API_BASE}/parking/exit/${vehicleId}`, { method: 'PUT' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Exit logging failed');
+
+        showToast(`Slot released! Vehicle ${data.vehicleNumber} checked out.`, 'success');
+        closeModal('modal-exit');
+        refreshAllData();
+        fetchLandingData();
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Confirm Vehicle Exit';
+      }
+    }
+
+    function openAddFlatModal() {
+      document.getElementById('form-flat').reset();
+      openModal('modal-flat');
+    }
+
+    async function handleFlatSubmit(e) {
+      e.preventDefault();
+      const payload = {
+        flatNumber: document.getElementById('flat-number').value.trim(),
+        ownerName: document.getElementById('flat-owner').value.trim(),
+        contactNumber: document.getElementById('flat-contact').value.trim()
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/flats`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to add flat');
+
+        showToast(`Flat ${payload.flatNumber} registered successfully!`, 'success');
+        closeModal('modal-flat');
+        loadFlats();
+        loadDashboard();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    function openAddSlotModal() {
+      document.getElementById('form-slot').reset();
+      openModal('modal-slot');
+    }
+
+    async function handleSlotSubmit(e) {
+      e.preventDefault();
+      const slotNum = parseInt(document.getElementById('slot-number-input').value, 10);
+      try {
+        const res = await fetch(`${API_BASE}/slots`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slotNumber: slotNum })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to create slot');
+
+        showToast(`Bay #${slotNum} created successfully!`, 'success');
+        closeModal('modal-slot');
+        loadParkingSlots();
+        loadDashboard();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    // ─── HELPERS ───
+
+    function formatTimestamp(isoStr) {
+      if (!isoStr) return '—';
+      try {
+        const d = new Date(isoStr);
+        if (isNaN(d.getTime())) return isoStr;
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) + ', ' +
+               d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+      } catch (e) {
+        return isoStr;
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const item = document.createElement('div');
+      item.className = `toast-item ${type}`;
+
+      let iconSvg = '';
+      if (type === 'success') {
+        iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+      } else if (type === 'error') {
+        iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+      } else {
+        iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
+      }
+
+      item.innerHTML = `
+        <div style="flex-shrink:0;">${iconSvg}</div>
+        <div style="flex:1;">
+          <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:${type==='success'?'#34d399':(type==='error'?'#f87171':'#60a5fa')}">
+            ${type === 'success' ? 'Completed' : (type === 'error' ? 'Notice' : 'Information')}
+          </div>
+          <div style="font-size:0.85rem; color:#fff;">${escapeHtml(message)}</div>
+        </div>
+      `;
+
+      container.appendChild(item);
+      setTimeout(() => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(100%)';
+        item.style.transition = 'all 0.3s ease';
+        setTimeout(() => item.remove(), 300);
+      }, 4500);
+    }
+
+    // Backdrop & Escape click to close
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+      }
+    });
+    document.querySelectorAll('.modal-backdrop').forEach(b => {
+      b.addEventListener('click', e => {
+        if (e.target === b) b.classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>
